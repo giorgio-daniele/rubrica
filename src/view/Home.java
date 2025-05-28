@@ -37,10 +37,23 @@ public class Home extends JFrame {
         setLayout(new BorderLayout());
         
         // Initialize UI components
-        this.table        = new JTable();
-        this.addButton    = new JButton("Nuovo");
-        this.editButton   = new JButton("Modifica");
-        this.deleteButton = new JButton("Elimina");
+        this.table = new JTable();
+        
+        // Initialize buttons
+        this.addButton = new JButton("Nuovo", new ImageIcon(
+        		new ImageIcon(getClass().getResource("/icons/add.png"))
+        		.getImage()
+        		.getScaledInstance(24, 24, Image.SCALE_SMOOTH)));
+        
+        this.editButton = new JButton("Modifica", new ImageIcon(
+        		new ImageIcon(getClass().getResource("/icons/edt.png"))
+        		.getImage()
+        		.getScaledInstance(24, 24, Image.SCALE_SMOOTH)));
+        
+        this.deleteButton = new JButton("Elimina", new ImageIcon(
+        		new ImageIcon(getClass().getResource("/icons/del.png"))
+        		.getImage()
+        		.getScaledInstance(24, 24, Image.SCALE_SMOOTH)));
         
         // Set single selection mode
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -76,7 +89,7 @@ public class Home extends JFrame {
         // this.buttonPanel.add(this.deleteButton);
 
         // Add components to the frame
-        add(this.toolBar, BorderLayout.SOUTH);                 // toolbar at the top
+        add(this.toolBar, BorderLayout.NORTH);                 // toolbar at the top
         add(new JScrollPane(this.table), BorderLayout.CENTER); // table in the center
         // add(this.buttonPanel, BorderLayout.SOUTH);          // optional: bottom panel (not used)
     }

@@ -82,8 +82,16 @@ public class Editor extends JFrame {
         this.add(this.formPanel, BorderLayout.CENTER);
 
         // Initialize buttons
-        this.saveButton   = new JButton("Salva");
-        this.cancelButton = new JButton("Annulla");
+        this.saveButton = new JButton("Salva", new ImageIcon(
+        		new ImageIcon(getClass().getResource("/icons/sav.png"))
+        		.getImage()
+        		.getScaledInstance(24, 24, Image.SCALE_SMOOTH)));
+        
+        this.cancelButton = new JButton("Annulla", new ImageIcon(
+        		new ImageIcon(getClass().getResource("/icons/abt.png"))
+        		.getImage()
+        		.getScaledInstance(24, 24, Image.SCALE_SMOOTH)));
+        
 
         // Create toolbar and add buttons
         this.toolBar = new JToolBar();
@@ -92,7 +100,7 @@ public class Editor extends JFrame {
         this.toolBar.add(this.cancelButton);
 
         // Add toolbar to the bottom of the window
-        this.add(this.toolBar, BorderLayout.SOUTH);
+        this.add(this.toolBar, BorderLayout.NORTH);
 
         // Deprecated: bottom button panel (replaced by toolbar)
         // this.buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
