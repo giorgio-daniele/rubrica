@@ -2,6 +2,7 @@ package controller;
 
 import model.Contact;
 import model.ContactTable;
+import model.User;
 import service.Database;
 import service.DatabaseListener;
 import view.Home;
@@ -9,70 +10,70 @@ import view.Home;
 import javax.swing.*;
 import java.util.List;
 
-/**
- * This class is used to control the lifecycle of the Home view.
- * According to the MVC pattern, the Controller is responsible for
- * managing interactions between the Model and the View. It handles
- * user input, updates the model data, and refreshes the view accordingly.
- * 
- * The Controller initializes the Home, responds to user actions,
- * validates input, and ensures synchronization between the UI and
- * underlying data (database).
- */
+public class HomeController implements DatabaseListener, LoginListener {
 
-public class HomeController implements DatabaseListener {
-
-    // Reference to the main UI window
-    private final Home home;
-    // Reference to the data layer
-    private final Database db;
-    // In-memory list of contacts
-    private List<Contact> contacts;
-
-    // Constructor
-    public HomeController(Database db) {
-        this.db       = db;
-        this.contacts = db.selectAllContacts();
-        this.home     = new Home();
-
-        this.db.addListener(this); 	  // Register for database change notifications
-        initUI();
-    }
-
-    // Set up UI listeners and show initial data
-    private void initUI() {
-        home.getAddButton().addActionListener(e    -> openAddEditor());
-        home.getEditButton().addActionListener(e   -> openEditEditor());
-        home.getDeleteButton().addActionListener(e -> deleteSelectedContact());
-
-        updateTable();
-        home.setVisible(true);
-    }
-
-    // Refresh the table with the latest data from the database
-    private void updateTable() {
-        this.contacts = db.selectAllContacts();
-        home.setTableModel(new ContactTable(this.contacts));
-    }
-
-    // Callback from the database to notify data changes
+    // Properties
+    private final Home     		  view;
+    private final Database 		  db;
+    private final LoginController lc;
+    private List<Contact>  		  contacts;
+    // Logged-in credentials
+    private User				  user;
+    
+    // onChange: what to do when the database is updated
     @Override
     public void onChange() {
         this.updateTable();
     }
-
-    // Open editor to add a new contact
-    private void openAddEditor() {
-        new EditorController(db, null);
+    
+    // onLogin: what to do when the login is successful
+	@Override
+	public void onLogin(User user) {
+		this.user = user;
+		this.initView();
+	}
+    
+    // Constructor
+    public HomeController(Database db, LoginController lc) {
+        this.db    = db;
+        this.lc    = lc;
+        this.view  = new Home();
+        
+        // Awaits for notification from database
+        this.db.addListener(this);
+        
+        // Awaits for notification from login controller
+        this.lc.addListener(this);
     }
 
-    // Open editor to modify the selected contact
-    private void openEditEditor() {
-        Contact selected = getSelectedContact();
+    // Setup the UI
+    private void initView() {
+        this.view.getAddButton().addActionListener(e  -> onAdd());
+        this.view.getEditButton().addActionListener(e -> onEdit());
+        this.view.getDeleteButton().addActionListener(e -> onDelete());
+        this.updateTable();
+        this.view.setVisible(true);
+    }
 
-        if (selected == null) {
+    private void updateTable() {
+        this.contacts = db.selectContactsByUsername(this.user.getUsername());
+        this.view.setTableModel(new ContactTable(this.contacts));
+    }
+    
+    // onAdd: what to do when the user wants
+    // to add a new contact
+    private void onAdd() {
+        new EditorController(db, null, user);
+    }
+
+    // onEdit: what to do when the user wants
+    // to edit a contact
+    private void onEdit() {
+        Contact contact = getSelectedContact();
+        
+        if (contact == null) {
             JOptionPane.showMessageDialog(
-                home,
+                view,
                 "Per modificare è necessario selezionare una persona.",
                 "Errore",
                 JOptionPane.ERROR_MESSAGE
@@ -80,16 +81,17 @@ public class HomeController implements DatabaseListener {
             return;
         }
 
-        new EditorController(this.db, selected);
+        new EditorController(this.db, contact, this.user);
     }
 
-    // Delete the currently selected contact with confirmation
-    private void deleteSelectedContact() {
+    // onEdit: what to do when the user wants
+    // to delete a contact
+    private void onDelete() {
         Contact selected = getSelectedContact();
 
         if (selected == null) {
             JOptionPane.showMessageDialog(
-                home,
+                view,
                 "Per eliminare è necessario selezionare una persona.",
                 "Errore",
                 JOptionPane.ERROR_MESSAGE
@@ -98,24 +100,24 @@ public class HomeController implements DatabaseListener {
         }
 
         int confirm = JOptionPane.showConfirmDialog(
-            home,
+            view,
             "Eliminare la persona " + selected.getFirstName() + " " + selected.getLastName() + "?",
             "Conferma eliminazione",
             JOptionPane.YES_NO_OPTION
         );
 
         if (confirm == JOptionPane.YES_OPTION) {
-            db.deleteByPhone(selected.getPhone());
+            db.deleteContact(selected.getPhone());
         }
     }
 
     // Get the contact selected in the JTable
     private Contact getSelectedContact() {
-        int selectedRow = home.getTable().getSelectedRow();
+        int selectedRow = view.getTable().getSelectedRow();
         if (selectedRow == -1)
             return null;
 
-        int modelIndex = home.getTable().convertRowIndexToModel(selectedRow);
+        int modelIndex = view.getTable().convertRowIndexToModel(selectedRow);
         return contacts.get(modelIndex);
     }
 }

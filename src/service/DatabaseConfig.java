@@ -13,7 +13,7 @@ public class DatabaseConfig {
         Properties props = new Properties();
         try (FileInputStream input = new FileInputStream(filePath)) {
             props.load(input);
-            url      = props.getProperty("db.url");
+            url      = props.getProperty("db.ip-server-mysql");
             user     = props.getProperty("db.user");
             password = props.getProperty("db.password");
             

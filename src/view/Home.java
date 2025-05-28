@@ -21,20 +21,18 @@ public class Home extends JFrame {
     private JButton  deleteButton;
     private JToolBar toolBar;
 
-    // Deprecated: bottom button panel (no longer used)
-    // private JPanel buttonPanel;
-
     public Home() {
-        super("Rubrica");
         initUI();
     }
 
     private void initUI() {
         // Set up main frame properties
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(WIDTH, HEIGHT);
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
+    	this.setTitle("Home");
+    	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	this.setResizable(false);
+        this.setSize(WIDTH, HEIGHT);
+        this.setLocationRelativeTo(null);
+        this.setLayout(new BorderLayout());
         
         // Initialize UI components
         this.table = new JTable();
@@ -57,12 +55,11 @@ public class Home extends JFrame {
         
         // Set single selection mode
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        // Increase row height slightly for better readability
         table.setRowHeight(24);
 
         // Make header font bold and a bit larger
         JTableHeader header = table.getTableHeader();
-        Font headerFont = header.getFont().deriveFont(Font.BOLD, header.getFont().getSize() + 2f);
+        Font headerFont 	= header.getFont().deriveFont(Font.BOLD, header.getFont().getSize() + 2f);
         header.setFont(headerFont);
 
         // Center-align the header text
@@ -82,16 +79,9 @@ public class Home extends JFrame {
         this.toolBar.add(this.editButton);
         this.toolBar.add(this.deleteButton);
 
-        // Deprecated: bottom panel with buttons
-        // this.buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        // this.buttonPanel.add(this.addButton);
-        // this.buttonPanel.add(this.editButton);
-        // this.buttonPanel.add(this.deleteButton);
-
         // Add components to the frame
         add(this.toolBar, BorderLayout.NORTH);                 // toolbar at the top
         add(new JScrollPane(this.table), BorderLayout.CENTER); // table in the center
-        // add(this.buttonPanel, BorderLayout.SOUTH);          // optional: bottom panel (not used)
     }
 
     // Table getter
@@ -122,8 +112,4 @@ public class Home extends JFrame {
         return toolBar;
     }
 
-    // Deprecated: button panel getter
-    // public JPanel getButtonPanel() {
-    //     return buttonPanel;
-    // }
 }

@@ -18,22 +18,13 @@ public class Editor extends JFrame {
     private JTextField addressField;
     private JTextField phoneField;
     private JTextField ageField;
-
-    private JButton saveButton;
-    private JButton cancelButton;
-
-    // New UI component: toolbar
-    private JToolBar toolBar;
-
-    // Deprecated: bottom button panel (replaced by toolbar)
-    // private JPanel buttonPanel;
-
-    private JPanel formPanel;
+    private JButton	   saveButton;
+    private JButton    cancelButton;
+    private JToolBar   toolBar;
+    private JPanel 	   formPanel;
 
     public Editor(Contact contact) {
-        super("Editor");
-        initUI();
-
+        initView();
         if (contact != null) {
             this.setFirstName(contact.getFirstName());
             this.setLastName(contact.getLastName());
@@ -43,9 +34,11 @@ public class Editor extends JFrame {
         }
     }
 
-    private void initUI() {
+    private void initView() {
         // Configure the window
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    	this.setTitle("Editor");
+    	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	this.setResizable(false);
         this.setSize(WIDTH, HEIGHT);
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
@@ -95,37 +88,29 @@ public class Editor extends JFrame {
 
         // Create toolbar and add buttons
         this.toolBar = new JToolBar();
-        this.toolBar.setFloatable(false); // Disable dragging
+        this.toolBar.setFloatable(false);
         this.toolBar.add(this.saveButton);
         this.toolBar.add(this.cancelButton);
-
-        // Add toolbar to the bottom of the window
         this.add(this.toolBar, BorderLayout.NORTH);
-
-        // Deprecated: bottom button panel (replaced by toolbar)
-        // this.buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        // this.buttonPanel.add(this.saveButton);
-        // this.buttonPanel.add(this.cancelButton);
-        // this.add(this.buttonPanel, BorderLayout.SOUTH);
     }
 
     // Getters for input values
-    public String getFirstName() { return firstNameField.getText().trim(); }
-    public String getLastName()  { return lastNameField.getText().trim();  }
-    public String getAddress()   { return addressField.getText().trim();   }
-    public String getPhone()     { return phoneField.getText().trim();     }
-    public String getAge()       { return ageField.getText().trim();       }
+    public String getFirstName() { return this.firstNameField.getText().trim(); }
+    public String getLastName()  { return this.lastNameField.getText().trim();  }
+    public String getAddress()   { return this.addressField.getText().trim();   }
+    public String getPhone()     { return this.phoneField.getText().trim();     }
+    public String getAge()       { return this.ageField.getText().trim();       }
 
     // Setters for editing existing contact
-    public void setFirstName(String value) { firstNameField.setText(value); }
-    public void setLastName(String value)  { lastNameField.setText(value);  }
-    public void setAddress(String value)   { addressField.setText(value);   }
-    public void setPhone(String value)     { phoneField.setText(value);     }
-    public void setAge(String value)       { ageField.setText(value);       }
+    public void setFirstName(String value) { this.firstNameField.setText(value); }
+    public void setLastName(String value)  { this.lastNameField.setText(value);  }
+    public void setAddress(String value)   { this.addressField.setText(value);   }
+    public void setPhone(String value)     { this.phoneField.setText(value);     }
+    public void setAge(String value)       { this.ageField.setText(value);       }
 
     // Button access for controller
-    public JButton getSaveButton()   { return saveButton; }
-    public JButton getCancelButton() { return cancelButton; }
+    public JButton getSaveButton()   { return this.saveButton; }
+    public JButton getCancelButton() { return this.cancelButton; }
 
     // Getter for the toolbar
     public JToolBar getToolBar()     { return toolBar; }
