@@ -29,7 +29,7 @@ public class Database {
     // the Contact table
     public List<Contact> selectAllContacts() {
         List<Contact> contacts = new ArrayList<>();
-        String query = "SELECT * FROM Contact";
+        String query = "SELECT * FROM Contact ORDER BY lastName";
 
         try (Connection conn = DriverManager.getConnection(this.url, this.user, this.password);
              Statement stmt  = conn.createStatement();
@@ -39,8 +39,8 @@ public class Database {
             	//System.out.println(rest);
                 contacts.add(new Contact(rest.getString("firstName"),
                 						 rest.getString("lastName"),
-                						 rest.getString("phone"),
                 						 rest.getString("address"),
+                						 rest.getString("phone"),
                 						 rest.getInt("age")));
             }
 

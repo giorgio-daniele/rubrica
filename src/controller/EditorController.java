@@ -60,16 +60,28 @@ public class EditorController {
 //            return;
 //        }
 //
-//        // Validate: phone number is required
-//        if (phone.isEmpty()) {
-//            JOptionPane.showMessageDialog(
-//                this.editor,
-//                "Il numero di telefono è obbligatorio.",
-//                "Errore di validazione",
-//                JOptionPane.ERROR_MESSAGE
-//            );
-//            return;
-//        }
+//       
+        // Validate: phone number is required
+        if (phone.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                this.editor,
+                "Il numero di telefono è obbligatorio.",
+                "Errore di validazione",
+                JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        } else {
+        	// Check all chars are digits
+        	if (!phone.matches("[0-9]+")) {
+                JOptionPane.showMessageDialog(
+                        this.editor,
+                        "Numero di telefono invalido.",
+                        "Errore di validazione",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                return;
+        	}
+        }
 
         // Validate: age must be a valid integer if provided
         int ageValue = 0;
