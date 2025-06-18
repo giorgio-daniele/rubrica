@@ -1,3 +1,3 @@
 # Rubrica
 
-Anything related to a short project I did for a job interview.
+Designing a short full-stack application in Java using Swing and MySQL.
